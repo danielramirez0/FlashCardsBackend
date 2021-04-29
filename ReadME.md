@@ -2,10 +2,11 @@ Flashcard App (Backend User Stories)
 Learning objective: Use Node.js, Express.js, MongoDB and Mongoose to build a flashcard backend server that will enable CRUD functionality for a client application.
 Technologies: Node.js, Express.js, MongoDB, Mongoose
 
-GOALS:
+COMPLETE:
 I want to set up my MongoDB Atlas cluster so that I have a place to store and access data.
 I want to connect my Node.js and Express.js Web API to a MongoDB cluster.
 
+TODO:
 Collection Endpoints
 I want to create a GET endpoint that responds to a request with all of card collections within my MongoDB flashcards collection.
 I want to create a GET endpoint that takes in a collection’s id as a parameter through the request’s URL and responds with the collection document.
