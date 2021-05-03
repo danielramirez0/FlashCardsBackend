@@ -27,7 +27,6 @@ router.post("/", async (req, res) => {
     const { error } = validate(req.body);
     if (error) return res.status(400).send(error);
     const flashCard = new FlashCard({
-      name: req.body.name,
       category: req.body.category,
       question: req.body.question,
       answer: req.body.answer,
@@ -49,7 +48,6 @@ router.put("/:id", async (req, res) => {
     const flashCard = await FlashCard.findByIdAndUpdate(
       req.params.id,
       {
-        name: req.body.name,
         category: req.body.category,
         question: req.body.question,
         answer: req.body.answer,

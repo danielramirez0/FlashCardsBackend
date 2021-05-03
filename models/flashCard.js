@@ -18,7 +18,6 @@ const Joi = require("joi");
 // });
 
 const flashCardSchema = new mongoose.Schema({
-  name: { type: String, required: true, minlength: 2, maxlength: 255 },
   category: { type: String, required: true, minlength: 2, maxlength: 50 },
   question: { type: String, required: true, minlength: 2, maxlength: 255 },
   answer: { type: String, required: true, minlength: 1, maxlength: 255 },
@@ -28,14 +27,13 @@ const flashCard = mongoose.model("FlashCard", flashCardSchema);
 
 function validateFlashCard(flashCard) {
   const schema = Joi.object({
-    name: Joi.string().min(2).max(255).required(),
     category: Joi.string().min(2).max(50).required(),
-    question: Joi.string().min(2).max(50).required(),
+    question: Joi.string().min(2).max(255).required(),
     answer: Joi.string().min(1).max(255).required(),
   });
   return schema.validate(flashCard);
 }
 
-exports.FlashCard = FlashCard;
+exports.FlashCard = flashCard;
 exports.validate = validateFlashCard;
 exports.flashCardSchema = flashCardSchema;
