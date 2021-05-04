@@ -1,5 +1,5 @@
-const { Card, validate } = require("../models/Card");
-const { Deck } = require(".././models/Deck");
+const { Card, validateCard } = require("../models/Card");
+const { Deck, validateDeck } = require(".././models/Deck");
 const express = require("express");
 const router = express.Router();
 
@@ -37,9 +37,11 @@ router.post("/", async (req, res) => {
 
     // return res.send(flashCard);
 
+    const { error } = validateDeck;
+    if (error) return res.status(400).send(error);
     const deck = new Deck({
       technology: req.body.technology,
-      cards: [req.body.cards],
+      cards: req.body.cards,
     });
 
     await deck.save();
