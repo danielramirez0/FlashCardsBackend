@@ -48,7 +48,7 @@ router.put("/:id", async (req, res) => {
     const { error } = validateDeck(req.body);
     if (error) return res.status(400).send(error);
 
-    const deck = await deck.findByIdAndUpdate(
+    const deck = await Deck.findByIdAndUpdate(
       req.params.id,
       {
         technology: req.body.technology,
@@ -119,7 +119,7 @@ router.post("/:id/cards", async (req, res) => {
     const deck = await Deck.findById(req.params.id);
     deck.cards.push(newCard);
     await deck.save();
-    return res.send(newCard);
+    return res.send(deck.cards);
   } catch (ex) {
     return res.status(500).send(`Internal Server Error: ${ex}`);
   }
@@ -147,5 +147,20 @@ router.put("/:collectionId/cards/:id", async (req, res) => {
   }
 });
 //DELETE a card from a collection (deck of cards). Need to pass in the collection id and card id
-router.delete("/:collectionId/cards/:id", async (req, res) => {});
+router.delete("/:collectionId/cards/:id", async (req, res) => {
+  try {
+    const deck = await Deck.findById(req.params.collectionId);
+    if (!deck) return res.status(400).send(`The deck with id "${req.params.collectionId}" does not exist.`);
+
+    const card = deck.cards.id(req.params.id);
+    if (!card) return res.status(400).send(`The card with id "${req.params.id}" does not exist.`);
+
+    deck.cards.id(req.params.id).remove();
+
+    await deck.save();
+    return res.send(deck.cards);
+  } catch (ex) {
+    return res.status(500).send(`Internal Server Error: ${ex}`);
+  }
+});
 module.exports = router;
