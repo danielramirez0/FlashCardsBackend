@@ -17,6 +17,7 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const deck = await Deck.findById(req.params.id);
+    if (!deck) return res.status(400).send(`The deck with id "${req.params.collectionId}" does not exist.`);
     return res.send(deck);
   } catch (ex) {
     return res.status(500).send(`Internal Server Error: ${ex}`);
@@ -81,6 +82,7 @@ router.delete("/:id", async (req, res) => {
 router.get("/:id/cards", async (req, res) => {
   try {
     const deck = await Deck.findById(req.params.id);
+    if (!deck) return res.status(400).send(`The deck with id "${req.params.collectionId}" does not exist.`);
     return res.send(deck.cards);
   } catch (ex) {
     return res.status(500).send(`Internal Server Error: ${ex}`);
@@ -92,7 +94,9 @@ router.get("/:id/cards", async (req, res) => {
 router.get("/:collectionId/cards/:id", async (req, res) => {
   try {
     const deck = await Deck.findById(req.params.collectionId);
+    if (!deck) return res.status(400).send(`The deck with id "${req.params.collectionId}" does not exist.`);
     const card = await deck.cards.id(req.params.id);
+    if (!card) return res.status(400).send(`The card with id "${req.params.id}" does not exist.`);
     return res.send(card);
   } catch (ex) {
     return res.status(500).send(`Internal Server Error: ${ex}`);
@@ -104,7 +108,6 @@ router.post("/:id/cards", async (req, res) => {
   try {
     const { error } = validateCard(req.body);
     if (error) return res.status(400).send(error);
-    // const newCard = req.body;
     const newCard = new Card({
       word: req.body.word,
       definition: req.body.definition,

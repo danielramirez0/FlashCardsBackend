@@ -1,13 +1,13 @@
 const connectDB = require("./startup/db");
 const express = require("express");
 const app = express();
-const flashCards = require("./routes/flashCards");
+const decks = require("./routes/decks");
 // const users = require("./routes/users");
 
 connectDB();
 
 app.use(express.json());
-app.use("/api/flashCards", flashCards);
+app.use("/api/decks", decks);
 // app.use("/api/users", users);
 
 const port = process.env.PORT || 5000;
