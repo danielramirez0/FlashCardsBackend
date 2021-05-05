@@ -1,8 +1,9 @@
-const { Card, validateCard } = require("../models/Card");
-const { Deck, validateDeck } = require(".././models/Deck");
 const express = require("express");
 const router = express.Router();
+const { Deck, validateDeck } = require(".././models/Deck");
+const { Card, validateCard } = require("../models/Card");
 
+// GET ALL DECKS
 router.get("/", async (req, res) => {
   try {
     const decks = await Deck.find();
@@ -12,16 +13,17 @@ router.get("/", async (req, res) => {
   }
 });
 
+//GET DECK BY ID
 router.get("/:id", async (req, res) => {
   try {
-    const card = await Card.findById(req.params.id);
-    if (!card) return res.status(400).send(`The flash card with id "${req.params.id}" does not exist.`);
-    return res.send(card);
+    const deck = await Deck.findById(req.params.id);
+    return res.send(deck);
   } catch (ex) {
     return res.status(500).send(`Internal Server Error: ${ex}`);
   }
 });
 
+//
 router.post("/", async (req, res) => {
   try {
     // Need to validate body before continuing
@@ -80,6 +82,16 @@ router.delete("/:id", async (req, res) => {
   try {
     const card = await Card.findByIdAndRemove(req.params.id);
     if (!card) return res.status(400).send(`The flash card with id "${req.params.id}" does not exist.`);
+    return res.send(card);
+  } catch (ex) {
+    return res.status(500).send(`Internal Server Error: ${ex}`);
+  }
+});
+
+router.get("/:collectionId/cards/:id", async (req, res) => {
+  try {
+    const deck = await Deck.findById(req.params.collectionId);
+    const card = await deck.cards.id(req.params.id);
     return res.send(card);
   } catch (ex) {
     return res.status(500).send(`Internal Server Error: ${ex}`);
