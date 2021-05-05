@@ -61,7 +61,7 @@ router.put("/:id", async (req, res) => {
 
     return res.send(deck);
   } catch (ex) {
-    return res.status(500).send(`Internal Server Error: ex`);
+    return res.status(500).send(`Internal Server Error: ${ex}`);
   }
 });
 
@@ -121,4 +121,28 @@ router.post("/:id/cards", async (req, res) => {
     return res.status(500).send(`Internal Server Error: ${ex}`);
   }
 });
+
+//UPDATE a specific card in a deck of cards Need to pass in the collection id and card id
+router.put("/:collectionId/cards/:id", async (req, res) => {
+  try {
+    const { error } = validateCard(req.body);
+    if (error) return res.status(400).send(error);
+
+    const deck = await Deck.findById(req.params.collectionId);
+    if (!deck) return res.status(400).send(`The deck with id "${req.params.collectionId}" does not exist.`);
+
+    const card = deck.cards.id(req.params.id);
+    if (!card) return res.status(400).send(`The card with id "${req.params.id}" does not exist.`);
+
+    card.word = req.body.word;
+    card.definition = req.body.definition;
+
+    await deck.save();
+    return res.send(deck);
+  } catch (ex) {
+    return res.status(500).send(`Internal Server Error: ${ex}`);
+  }
+});
+//DELETE a card from a collection (deck of cards). Need to pass in the collection id and card id
+router.delete("/:collectionId/cards/:id", async (req, res) => {});
 module.exports = router;
