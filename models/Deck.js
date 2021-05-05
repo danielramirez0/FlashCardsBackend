@@ -14,7 +14,7 @@ function validateDeck(deck) {
     technology: Joi.string().min(2).max(255).required(),
     cards: Joi.array().required(),
   });
-  return schema.validate(card);
+  return schema.validate(deck);
 }
 
 exports.Deck = deck;
