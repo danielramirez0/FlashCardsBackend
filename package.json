@@ -20,6 +20,7 @@
   "homepage": "https://github.com/danrezz/FlashCardsBackend#readme",
   "dependencies": {
     "config": "^3.3.6",
+    "cors": "^2.8.5",
     "express": "^4.17.1",
     "joi": "^17.4.0",
     "mongoose": "^5.12.7",
